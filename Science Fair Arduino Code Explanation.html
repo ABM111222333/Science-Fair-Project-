@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Alarm System Project | Class 7-O</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f5f7fa; color: #333; line-height: 1.6; padding: 20px; max-width: 1000px; margin: 0 auto; }
+        header { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%); color: white; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        h2 { color: #b71c1c; border-bottom: 2px solid #ffcdd2; padding-bottom: 8px; margin: 25px 0 15px 0; }
+        h3 { color: #555; margin-top: 20px; }
+        .subtitle { font-size: 1.2rem; opacity: 0.9; }
+        .team, .class { margin: 5px 0; font-size: 1.1rem; }
+        .container { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); margin-bottom: 25px; }
+        .code-block { background-color: #2d2d2d; color: #f8f8f2; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.95rem; margin: 15px 0; tab-size: 4; }
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .function { color: #dcdcaa; }
+        .number { color: #b5cea8; }
+        .string { color: #ce9178; }
+        .explanation { background-color: #e8f4fd; border-left: 4px solid #2196f3; padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        ul { margin-left: 20px; margin-bottom: 15px; }
+        li { margin-bottom: 8px; }
+        footer { text-align: center; margin-top: 40px; padding: 20px; color: #777; font-size: 0.9rem; border-top: 1px solid #eee; }
+        .note { background-color: #fff8e1; border-left: 4px solid #ffb300; padding: 12px; margin: 15px 0; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🔥 Fire Alarm System</h1>
+        <p class="subtitle">Arduino-Based Heat Detection & Alert System</p>
+        <p class="team"><strong>Project Team:</strong> AbdulAziz Raed Alkutshan, Ahmed Binirfan Mian, Hanan Hussain Farooq, Mubasher Moosa Baqi, Muhammad Ibrahim Rizwan</p>
+        <p class="class"><strong>Class:</strong> 7-O</p>
+    </header>
+
+    <div class="container">
+        <h2>Project Overview</h2>
+        <p>This project implements a simple yet effective fire alarm system using an Arduino. It continuously monitors temperature using a heat sensor and triggers a visual (LED) and audible (buzzer) alarm when a dangerous threshold is exceeded.</p>
+    </div>
+
+    <div class="container">
+        <h2>Complete Arduino Code</h2>
+        <p>The complete, functional code for the system is provided below.</p>
+
+        <div class="code-block">
+<pre><span class="comment">// Fire Alarm System - Arduino Code
+// Team 7-Q</span>
+
+<span class="comment">// ===== PART 1: Pin Definitions & Global Variables =====</span>
+<span class="keyword">const int</span> heatSensorPin = A0;  <span class="comment">// Pin for the heat sensor (Analog Input)</span>
+<span class="keyword">const int</span> buzzerPin = 9;      <span class="comment">// Pin for the buzzer (PWM capable)</span>
+<span class="keyword">const int</span> ledPin = 13;        <span class="comment">// Pin for the LED (Built-in LED on most boards)</span>
+
+<span class="keyword">const float</span> thresholdTemp = <span class="number">50.0</span>; <span class="comment">// Alarm trigger at 50°C</span>
+
+<span class="comment">// ===== PART 2: setup() Function - One-Time Setup =====</span>
+<span class="keyword">void</span> <span class="function">setup</span>() {
+    <span class="comment">// Start serial communication for debugging</span>
+    Serial.<span class="function">begin</span>(<span class="number">9600</span>);
+
+    <span class="comment">// Set buzzer and LED pins as OUTPUT</span>
+    <span class="function">pinMode</span>(buzzerPin, OUTPUT);
+    <span class="function">pinMode</span>(ledPin, OUTPUT);
+}
+
+<span class="comment">// ===== PART 3: loop() Function - Main Program (Repeats Forever) =====</span>
+<span class="keyword">void</span> <span class="function">loop</span>() {
+    <span class="comment">// 1. Read the heat sensor value</span>
+    <span class="keyword">int</span> sensorValue = <span class="function">analogRead</span>(heatSensorPin);
+
+    <span class="comment">// 2. Convert sensor reading to temperature (Example conversion)</span>
+    <span class="keyword">float</span> temperature = sensorValue * (<span class="number">5.0</span> / <span class="number">1023.0</span>) * <span class="number">100.0</span>;
+
+    <span class="comment">// 3. Print temperature to the Serial Monitor</span>
+    Serial.<span class="function">print</span>(<span class="string">"Temperature: "</span>);
+    Serial.<span class="function">println</span>(temperature);
+
+    <span class="comment">// 4. Check if temperature exceeds the threshold</span>
+    <span class="keyword">if</span> (temperature > thresholdTemp) {
+        <span class="comment">// TRIGGER ALARM: Turn on LED and sound buzzer</span>
+        <span class="function">digitalWrite</span>(ledPin, HIGH);
+        <span class="function">tone</span>(buzzerPin, <span class="number">1000</span>); <span class="comment">// 1000 Hz tone</span>
+    } <span class="keyword">else</span> {
+        <span class="comment">// SYSTEM SAFE: Turn off LED and buzzer</span>
+        <span class="function">digitalWrite</span>(ledPin, LOW);
+        <span class="function">noTone</span>(buzzerPin);
+    }
+    <span class="function">delay</span>(<span class="number">1000</span>); <span class="comment">// Wait for 1 second before next reading</span>
+}</pre>
+        </div>
+        <div class="note">
+            <strong>Note:</strong> The temperature conversion formula <code>sensorValue * (5.0 / 1023.0) * 100.0</code> is an example. You may need to calibrate it based on the specific heat sensor module you are using.
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Code Explanation & Breakdown</h2>
+
+        <h3>Part 1: Pin Definitions & Global Variables</h3>
+        <p>This section maps the Arduino's physical pins to components and sets a critical constant.</p>
+        <ul>
+            <li><code>const int heatSensorPin = A0;</code> → The temperature sensor is connected to Analog Pin A0.</li>
+            <li><code>const int buzzerPin = 9;</code> → The buzzer is connected to Digital Pin 9 (can produce sound tones).</li>
+            <li><code>const int ledPin = 13;</code> → The LED uses Pin 13, which has a built-in LED on most boards.</li>
+            <li><code>const float thresholdTemp = 50.0;</code> → The safety limit. The alarm activates if temperature exceeds 50°C.</li>
+        </ul>
+        <div class="explanation">
+            <strong>Why <code>const</code>?</strong> The <code>const</code> keyword declares a "constant" — a value that is set once and never changes during the program's run, which is perfect for hardware pins and fixed thresholds.
+        </div>
+
+        <h3>Part 2: The <code>setup()</code> Function</h3>
+        <p>This function runs only once when the Arduino powers on. It prepares the system.</p>
+        <ul>
+            <li><code>Serial.begin(9600);</code> → Starts communication with the computer so you can see temperature readings in the "Serial Monitor" tool.</li>
+            <li><code>pinMode(buzzerPin, OUTPUT);</code> → Tells the Arduino that Pin 9 will be used to send an electrical signal <strong>to</strong> the buzzer.</li>
+            <li><code>pinMode(ledPin, OUTPUT);</code> → Similarly configures Pin 13 to control the LED.</li>
+        </ul>
+
+        <h3>Part 3: The <code>loop()</code> Function</h3>
+        <p>This is the program's core. It repeats indefinitely, creating a continuous monitoring cycle every second.</p>
+        <ul>
+            <li><strong>Step 1 (Read):</strong> <code>analogRead(heatSensorPin)</code> gets a raw voltage value (0-1023) from the sensor.</li>
+            <li><strong>Step 2 (Convert):</strong> The raw value is converted into a temperature in Celsius.</li>
+            <li><strong>Step 3 (Report):</strong> The temperature is sent to the computer screen for live monitoring.</li>
+            <li><strong>Step 4 (Decide & Act):</strong> An <code>if-else</code> statement checks the temperature against the 50°C limit and controls the LED and buzzer accordingly.</li>
+            <li><strong>Step 5 (Pause):</strong> <code>delay(1000)</code> waits for 1000 milliseconds (1 second) before restarting the loop.</li>
+        </ul>
+        <div class="explanation">
+            <strong>How the System Works:</strong> This loop creates a <strong>perpetual automated monitoring system</strong>. Every second, it senses, processes, reports, and reacts, ensuring immediate alert in case of overheating.
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Project Summary</h2>
+        <p>This Arduino-based Fire Alarm System demonstrates the practical application of coding and electronics for safety. By defining hardware connections, setting a logical threshold, and implementing a continuous monitoring loop, the system autonomously detects a potential fire hazard and provides clear audible and visual alerts.</p>
+        <p>The project successfully integrates key programming concepts: <strong>variable definition, input/output handling, conditional logic, and real-time sensor data processing</strong>.</p>
+    </div>
+
+    <footer>
+        <p>Fire Alarm System Project – Created by Class 7-O</p>
+    </footer>
+
+</body>
+</html>
+
+
+
+
